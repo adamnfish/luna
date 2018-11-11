@@ -9,12 +9,12 @@ import Html.Attributes exposing (src)
 
 
 type alias Model =
-    {}
+  {}
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+  ( {}, Cmd.none )
 
 
 
@@ -22,12 +22,12 @@ init =
 
 
 type Msg
-    = NoOp
+  = NoOp
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+  ( model, Cmd.none )
 
 
 
@@ -36,10 +36,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
+  div []
+    [ img [ src "/logo.svg" ] []
+    , h1 [] [ text "Your Elm App is working!" ]
+    ]
 
 
 
@@ -48,9 +48,9 @@ view model =
 
 main : Program () Model Msg
 main =
-    Browser.element
-        { view = view
-        , init = \_ -> init
-        , update = update
-        , subscriptions = always Sub.none
-        }
+  Browser.element
+    { view = view
+    , init = \_ -> init
+    , update = update
+    , subscriptions = always Sub.none
+    }
