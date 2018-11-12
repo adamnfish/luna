@@ -1,50 +1,35 @@
 module Main exposing (..)
 
+import Array exposing (Array)
 import Browser
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Browser.Events
 
-
----- MODEL ----
-
-
-type alias Model =
-  {}
+import Examples exposing (orbit, slingshot)
+import Model exposing (Model (..))
+import Msg exposing (Msg (..), update)
+import Physics exposing (advanceUniverse)
+import View exposing (view)
 
 
 init : ( Model, Cmd Msg )
 init =
-  ( {}, Cmd.none )
+  ( Setup Array.empty
+  , Cmd.none
+  )
 
 
+-- SUBS
 
----- UPDATE ----
-
-
-type Msg
-  = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-  ( model, Cmd.none )
-
-
-
----- VIEW ----
-
-
-view : Model -> Html Msg
-view model =
-  div []
-    [ img [ src "/logo.svg" ] []
-    , h1 [] [ text "Your Elm App is working!" ]
-    ]
-
+animationTick : Model -> Sub Msg
+animationTick model =
+  case model of
+    Setup _ ->
+      Sub.none
+    Run _ ->
+      Browser.Events.onAnimationFrameDelta Tick
 
 
 ---- PROGRAM ----
-
 
 main : Program () Model Msg
 main =
@@ -52,5 +37,5 @@ main =
     { view = view
     , init = \_ -> init
     , update = update
-    , subscriptions = always Sub.none
+    , subscriptions = \model -> animationTick model
     }
