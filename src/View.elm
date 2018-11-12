@@ -9,7 +9,7 @@ import Svg.Attributes exposing
   (height, width, stroke, strokeWidth, fill, cx, cy, r)
 import Svg.Events
 
-import Examples exposing (orbit, slingshot)
+import Examples exposing (slingshot, orbit, eccentricOrbit)
 import Model exposing (Model (..), Body)
 import Msg exposing (Msg (..))
 
@@ -22,13 +22,18 @@ view model =
         [ h1 [] [ text "Luna" ]
         , p []
             [ button
-              [ onClick ( Genesis orbit ) ]
-              [ text "Orbit" ]
+              [ onClick ( Genesis slingshot ) ]
+              [ text "Slingshot" ]
             ]
         , p []
             [ button
-              [ onClick ( Genesis slingshot ) ]
-              [ text "Slingshot" ]
+              [ onClick ( Genesis orbit ) ]
+              [ text "Orbit (regular)" ]
+            ]
+        , p []
+            [ button
+              [ onClick ( Genesis eccentricOrbit ) ]
+              [ text "Orbit (eccentric)" ]
             ]
         ]
     Run universe ->

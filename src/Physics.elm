@@ -34,7 +34,7 @@ g : Float
 g = 1
 
 fma : Float -> Body -> Float
-fma force body = force * body.mass
+fma force body = force / body.mass
 
 forceDueToGravity : Body -> Array Body -> Acceleration
 forceDueToGravity body otherBodies =
@@ -60,7 +60,7 @@ forceDueToGravity body otherBodies =
           accumulatedAcceleration
           acceleration
   in
-    Array.foldl combine initialAcceleration otherBodies
+    Debug.log "force" ( Array.foldl combine initialAcceleration otherBodies )
 
 accelerationDueToGravity : Body -> Array Body -> Acceleration
 accelerationDueToGravity body otherBodies =
