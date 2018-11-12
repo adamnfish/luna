@@ -1,6 +1,5 @@
 module Physics exposing (advanceUniverse, distanceBetween, accelerationDueToGravity)
 
-import Debug
 import Array exposing (Array)
 
 import Model exposing (Position, Velocity, Acceleration, Body, Universe)
@@ -60,7 +59,7 @@ forceDueToGravity body otherBodies =
           accumulatedAcceleration
           acceleration
   in
-    Debug.log "force" ( Array.foldl combine initialAcceleration otherBodies )
+    Array.foldl combine initialAcceleration otherBodies
 
 accelerationDueToGravity : Body -> Array Body -> Acceleration
 accelerationDueToGravity body otherBodies =
