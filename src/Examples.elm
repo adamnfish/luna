@@ -50,7 +50,7 @@ solarSystem =
   [ { radius = 20
     , mass = 1000
     , position = { x = 500, y = 500 }
-    , velocity = { δx = -0.002, δy = -0.0001 }
+    , velocity = { δx = -0.005, δy = -0.0001 }
     }
   , { radius = 3
     , mass = 30
