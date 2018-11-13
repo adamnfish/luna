@@ -13,7 +13,7 @@ import View exposing (view)
 
 init : ( Model, Cmd Msg )
 init =
-  ( Setup Array.empty
+  ( Welcome
   , Cmd.none
   )
 
@@ -23,7 +23,7 @@ init =
 animationTick : Model -> Sub Msg
 animationTick model =
   case model of
-    Setup _ ->
+    Welcome ->
       Sub.none
     Run _ ->
       Browser.Events.onAnimationFrameDelta Tick

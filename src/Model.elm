@@ -31,5 +31,5 @@ type alias Universe =
   }
 
 type Model
-  = Setup ( Array Body )
+  = Welcome
   | Run Universe

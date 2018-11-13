@@ -28,10 +28,10 @@ update msg model =
       , Cmd.none
       )
     Apolalypse ->
-      ( Setup Array.empty, Cmd.none )
+      ( Welcome, Cmd.none )
     Tick δt ->
       case model of
-        Setup _ ->
+        Welcome ->
           ( model, Cmd.none )
         Run universe ->
           ( Run ( advanceUniverse universe δt )

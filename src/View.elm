@@ -17,30 +17,6 @@ import Msg exposing (Msg (..))
 view : Model -> Html Msg
 view model =
   case model of
-    Setup _ ->
-      div []
-        [ h1 [] [ text "Luna" ]
-        , p []
-            [ button
-              [ onClick ( Genesis slingshot ) ]
-              [ text "Slingshot" ]
-            ]
-        , p []
-            [ button
-              [ onClick ( Genesis orbit ) ]
-              [ text "Orbit (regular)" ]
-            ]
-        , p []
-            [ button
-              [ onClick ( Genesis eccentricOrbit ) ]
-              [ text "Orbit (eccentric)" ]
-            ]
-        , p []
-            [ button
-              [ onClick ( Genesis solarSystem ) ]
-              [ text "Solar system" ]
-            ]
-        ]
     Run universe ->
       div []
         [ h1 [] [ text "Luna" ]
@@ -66,6 +42,30 @@ view model =
               []
             ] ++ ( bodyEls universe.bodies )
           )
+        ]
+    Welcome ->
+      div []
+        [ h1 [] [ text "Luna" ]
+        , p []
+            [ button
+              [ onClick ( Genesis slingshot ) ]
+              [ text "Slingshot" ]
+            ]
+        , p []
+            [ button
+              [ onClick ( Genesis orbit ) ]
+              [ text "Orbit (regular)" ]
+            ]
+        , p []
+            [ button
+              [ onClick ( Genesis eccentricOrbit ) ]
+              [ text "Orbit (eccentric)" ]
+            ]
+        , p []
+            [ button
+              [ onClick ( Genesis solarSystem ) ]
+              [ text "Solar system" ]
+            ]
         ]
 
 bodyEls : Array Body -> List ( Html Msg )
