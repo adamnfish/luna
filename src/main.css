@@ -13,3 +13,21 @@ img {
   margin: 20px 0;
   max-width: 200px;
 }
+
+.cta-button {
+  padding: 20px;
+  min-width: 200px;
+  background-color: #cccccc;
+  border: solid 1px #666666;
+  /* border-radius: 5px; */
+  box-shadow: 2px 2px #ccc;
+}
+.cta-button:hover {
+  background-color: #aaaaaa;
+  cursor: pointer;
+}
+
+.universe {
+  width: 700px;
+  height: 700px;
+}
