@@ -1,5 +1,10 @@
 # Luna
 
+> The gravity assist maneuver was first used in 1959 when
+> Luna 3 photographed the far side of Earth's Moon.
+>
+> – [en.wikipedia.org/wiki/Luna_3](https://en.wikipedia.org/wiki/Luna_3)
+
 App to demonstrate gravitational slingshot maneuvers.
 
 **Note:** Because this app uses the `requestAnimationFrame` API its
