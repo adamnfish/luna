@@ -8,8 +8,6 @@ import Physics exposing (advanceUniverse)
 
 type Msg
   = NoOp
-  -- A compiler bug in 0.19 prevents use of Array in Msg
-  -- so we use List here to kick it off and then convert when it's used elsewhere
   | Genesis ( List Body )
   | Apolalypse
   | Tick Float
