@@ -23,11 +23,13 @@ type alias Body =
   , mass : Float
   , position : Position
   , velocity : Velocity
+  , acceleration : Acceleration
   }
 
 type alias Universe =
   { bodies : Array Body
   , time : Float
+  , showPhysics : Bool
   }
 
 type Model

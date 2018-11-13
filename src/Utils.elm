@@ -1,4 +1,4 @@
-module Utils exposing (arrMapWithOthers)
+module Utils exposing (arrMapWithOthers, flattenList)
 
 import Array exposing (Array)
 
@@ -28,3 +28,7 @@ arrMapWithOthers f aa =
         f a ( elsWithoutI i )
       )
       aa
+
+flattenList : List ( List a ) -> List a
+flattenList list =
+  List.foldr (++) [] list

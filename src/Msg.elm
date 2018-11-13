@@ -13,6 +13,7 @@ type Msg
   | Genesis ( List Body )
   | Apolalypse
   | Tick Float
+  | TogglePhysics
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -24,6 +25,7 @@ update msg model =
       ( Run
         { bodies = Array.fromList bodies
         , time = 0
+        , showPhysics = False
         }
       , Cmd.none
       )
@@ -37,4 +39,12 @@ update msg model =
           ( Run ( advanceUniverse universe δt )
           , Cmd.none
           )
-
+    TogglePhysics ->
+      case model of
+        Run universe ->
+          ( Run
+            { universe | showPhysics = not universe.showPhysics }
+          , Cmd.none
+          )
+        _ ->
+          ( model, Cmd.none )

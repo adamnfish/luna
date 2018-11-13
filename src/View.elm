@@ -4,14 +4,15 @@ import Array exposing (Array)
 import Html exposing (Html, text, div, ul, li, h1, img, p, a, button)
 import Html.Attributes exposing (src, class)
 import Html.Events exposing (onClick)
-import Svg exposing (Svg, svg, rect, circle)
+import Svg exposing (Svg, svg, rect, circle, line)
 import Svg.Attributes exposing
-  (viewBox, height, width, stroke, strokeWidth, fill, cx, cy, r)
+  (viewBox, height, width, stroke, strokeWidth, fill, cx, cy, x1, x2, y1, y2, r)
 import Svg.Events
 
 import Examples exposing (slingshot, orbit, eccentricOrbit, solarSystem)
 import Model exposing (Model (..), Body)
 import Msg exposing (Msg (..))
+import Utils exposing (flattenList)
 
 
 view : Model -> Html Msg
@@ -29,6 +30,18 @@ view model =
               , class "cta-button"
               ]
               [ text "Quit" ]
+            , button
+              [ onClick TogglePhysics
+              , class "cta-button"
+              ]
+              [ text
+                (
+                  if universe.showPhysics then
+                    "Hide physics"
+                  else
+                    "Show physics"
+                )
+              ]
             ]
           ]
         , svg
@@ -43,7 +56,7 @@ view model =
               , fill "#666666"
               ]
               []
-            ] ++ ( bodyEls universe.bodies )
+            ] ++ ( bodyEls universe.showPhysics universe.bodies )
           )
         ]
     Welcome ->
@@ -79,16 +92,42 @@ view model =
             ]
         ]
 
-bodyEls : Array Body -> List ( Html Msg )
-bodyEls bodies =
-  Array.toList <| Array.map bodyEl bodies
+bodyEls : Bool -> Array Body -> List ( Html Msg )
+bodyEls showPhysics bodies =
+  flattenList <| Array.toList <| Array.map ( bodyEl showPhysics ) bodies
 
-bodyEl : Body -> Html Msg
-bodyEl body =
-  circle
-    [ r ( String.fromInt <| round body.radius )
-    , cx ( String.fromInt <| round body.position.x )
-    , cy ( String.fromInt <| round body.position.y )
-    , fill "#f7f7f7"
-    ]
-    []
+bodyEl : Bool -> Body -> List ( Html Msg )
+bodyEl showPhysics body =
+  let
+    physics =
+      if showPhysics then
+        [ line
+          [ x1 ( String.fromInt <| round <| body.position.x )
+          , x2 ( String.fromInt <| round <| body.position.x + ( body.velocity.δx * 50 ) )
+          , y1 ( String.fromInt <| round <| body.position.y )
+          , y2 ( String.fromInt <| round <| body.position.y + ( body.velocity.δy * 50 ) )
+          , stroke "yellow"
+          , strokeWidth "2"
+          ]
+          []
+        , line
+          [ x1 ( String.fromInt <| round <| body.position.x )
+          , x2 ( String.fromInt <| round <| body.position.x + ( body.acceleration.δδx * 1000 ) )
+          , y1 ( String.fromInt <| round <| body.position.y )
+          , y2 ( String.fromInt <| round <| body.position.y + ( body.acceleration.δδy * 1000 ) )
+          , stroke "red"
+          , strokeWidth "2"
+          ]
+          []
+        ]
+      else
+        []
+  in
+    [ circle
+      [ r ( String.fromInt <| round body.radius )
+      , cx ( String.fromInt <| round body.position.x )
+      , cy ( String.fromInt <| round body.position.y )
+      , fill "#f7f7f7"
+      ]
+      []
+    ] ++ physics

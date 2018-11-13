@@ -19,12 +19,13 @@ advanceUniverse prevUniverse δms =
 advanceBody : Float -> Body -> Array Body -> Body
 advanceBody δms body otherBodies =
   let
-    acceleration = accelerationDueToGravity body otherBodies
-    newVelocity = applyAcceleration acceleration body.velocity δms
+    currentAcceleration = accelerationDueToGravity body otherBodies
+    newVelocity = applyAcceleration currentAcceleration body.velocity δms
     newPosition = applyVelocity newVelocity body.position δms
   in
     { body | velocity = newVelocity
            , position = newPosition
+           , acceleration = currentAcceleration
     }
 
 -- gravitational constant
