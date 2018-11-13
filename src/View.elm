@@ -2,7 +2,7 @@ module View exposing (view)
 
 import Array exposing (Array)
 import Html exposing (Html, text, div, ul, li, h1, img, p, a, button)
-import Html.Attributes exposing (src, class)
+import Html.Attributes exposing (src, class, href)
 import Html.Events exposing (onClick)
 import Svg exposing (Svg, svg, rect, circle, line)
 import Svg.Attributes exposing
@@ -90,6 +90,13 @@ view model =
               ]
               [ text "Solar system" ]
             ]
+        , p
+          [ class "info-box" ]
+          [ text "Source code available at "
+          , a
+            [ href "https://github.com/adamnfish/luna" ]
+            [ text "github.com/adamnfish/luna" ]
+          ]
         ]
 
 bodyEls : Bool -> Array Body -> List ( Html Msg )
