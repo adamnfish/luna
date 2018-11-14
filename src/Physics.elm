@@ -39,7 +39,7 @@ fma force body = force / body.mass
 forceDueToGravity : Body -> Array Body -> Acceleration
 forceDueToGravity body otherBodies =
   let
-    initialAcceleration = { δδx = 0, δδy = 0 }
+    zero = { δδx = 0, δδy = 0 }
     combine : Body -> Acceleration -> Acceleration
     combine otherBody accumulatedAcceleration =
       let
@@ -60,17 +60,15 @@ forceDueToGravity body otherBodies =
           accumulatedAcceleration
           acceleration
   in
-    Array.foldl combine initialAcceleration otherBodies
+    Array.foldl combine zero otherBodies
 
 accelerationDueToGravity : Body -> Array Body -> Acceleration
 accelerationDueToGravity body otherBodies =
   let
     force = forceDueToGravity body otherBodies
-    fx = force.δδx
-    fy = force.δδy
   in
-    { δδx = fma fx body
-    , δδy = fma fy body
+    { δδx = fma force.δδx body
+    , δδy = fma force.δδy body
     }
 
 distanceBetween : Position -> Position -> Float
@@ -104,11 +102,9 @@ applyAcceleration : Acceleration -> Velocity -> Float -> Velocity
 applyAcceleration acceleration velocity δms =
   let
     δv = scaleAcceleration ( δms / 16 ) acceleration
-    δδx = δv.δδx
-    δδy = δv.δδy
   in
-    { δx = velocity.δx + δδx
-    , δy = velocity.δy + δδy
+    { δx = velocity.δx + δv.δδx
+    , δy = velocity.δy + δv.δδy
     }
 
 -- we'll treat 16ms as our Time Unit (roughly one frame)
@@ -117,9 +113,7 @@ applyVelocity : Velocity -> Position -> Float -> Position
 applyVelocity velocity position δms =
   let
     v = scaleVelocity ( δms / 16 ) velocity
-    δx = v.δx
-    δy = v.δy
   in
-    { x = position.x + δx
-    , y = position.y + δy
+    { x = position.x + v.δx
+    , y = position.y + v.δy
     }
