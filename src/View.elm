@@ -26,7 +26,7 @@ view model =
           [ p
             []
             [ button
-              [ onClick Apolalypse
+              [ onClick Apocalypse
               , class "cta-button"
               ]
               [ text "Quit" ]

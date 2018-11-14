@@ -9,7 +9,7 @@ import Physics exposing (advanceUniverse)
 type Msg
   = NoOp
   | Genesis ( List Body )
-  | Apolalypse
+  | Apocalypse
   | Tick Float
   | TogglePhysics
 
@@ -27,7 +27,7 @@ update msg model =
         }
       , Cmd.none
       )
-    Apolalypse ->
+    Apocalypse ->
       ( Welcome, Cmd.none )
     Tick δt ->
       case model of
