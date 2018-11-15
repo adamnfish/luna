@@ -7,11 +7,6 @@
 
 App to demonstrate gravitational slingshot maneuvers.
 
-**Note:** Because this app uses the `requestAnimationFrame` API its
-behaviour is nondeterministic. Acceleration is applied every frame and
-with different times between each frame the accelerations (and thus
-resulting velocities and positions) will diverge.
-
 https://adamnfish.github.io/luna/index.html
 
 ## Source code
