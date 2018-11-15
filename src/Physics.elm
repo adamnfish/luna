@@ -6,22 +6,22 @@ import Model exposing (Position, Velocity, Acceleration, Body, Universe)
 import Utils exposing (arrMapWithOthers)
 
 
-advanceUniverse : Universe -> Float -> Universe
-advanceUniverse prevUniverse δms =
+advanceUniverse : Universe -> Universe
+advanceUniverse prevUniverse =
   let
-    bodies = arrMapWithOthers ( advanceBody δms ) prevUniverse.bodies
+    bodies = arrMapWithOthers advanceBody prevUniverse.bodies
   in
     { prevUniverse | bodies = bodies
-                   , time = prevUniverse.time + δms
+                   , time = prevUniverse.time + 1
     }
 
 
-advanceBody : Float -> Body -> Array Body -> Body
-advanceBody δms body otherBodies =
+advanceBody : Body -> Array Body -> Body
+advanceBody body otherBodies =
   let
     currentAcceleration = accelerationDueToGravity body otherBodies
-    newVelocity = applyAcceleration currentAcceleration body.velocity δms
-    newPosition = applyVelocity newVelocity body.position δms
+    newVelocity = applyAcceleration currentAcceleration body.velocity
+    newPosition = applyVelocity newVelocity body.position
   in
     { body | velocity = newVelocity
            , position = newPosition
@@ -84,36 +84,14 @@ addAcceleration a1 a2 =
   , δδy = a1.δδy + a2.δδy
   }
 
-scaleAcceleration : Float -> Acceleration -> Acceleration
-scaleAcceleration scale acceleration =
-  { δδx = acceleration.δδx * scale
-  , δδy = acceleration.δδy * scale
+applyAcceleration : Acceleration -> Velocity -> Velocity
+applyAcceleration acceleration velocity =
+  { δx = velocity.δx + acceleration.δδx
+  , δy = velocity.δy + acceleration.δδy
   }
 
-scaleVelocity : Float -> Velocity -> Velocity
-scaleVelocity scale velocity =
-  { δx = velocity.δx * scale
-  , δy = velocity.δy * scale
+applyVelocity : Velocity -> Position -> Position
+applyVelocity velocity position =
+  { x = position.x + velocity.δx
+  , y = position.y + velocity.δy
   }
-
--- we'll treat 16ms as our Time Unit (roughly one frame)
--- but the subscription gives us the diff in ms
-applyAcceleration : Acceleration -> Velocity -> Float -> Velocity
-applyAcceleration acceleration velocity δms =
-  let
-    δv = scaleAcceleration ( δms / 16 ) acceleration
-  in
-    { δx = velocity.δx + δv.δδx
-    , δy = velocity.δy + δv.δδy
-    }
-
--- we'll treat 16ms as our Time Unit (roughly one frame)
--- but the subscription gives us the diff in ms
-applyVelocity : Velocity -> Position -> Float -> Position
-applyVelocity velocity position δms =
-  let
-    v = scaleVelocity ( δms / 16 ) velocity
-  in
-    { x = position.x + v.δx
-    , y = position.y + v.δy
-    }

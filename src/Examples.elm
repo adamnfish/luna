@@ -38,14 +38,14 @@ eccentricOrbit =
 slingshot : List Body
 slingshot =
   [ { radius = 11
-    , mass = 300
-    , position = { x = 400, y = 500 }
+    , mass = 1000
+    , position = { x = 152, y = 500 }
     , velocity = { δx = 0.5, δy = 0 }
     , acceleration = { δδx = 0, δδy = 0 }
     }
   , { radius = 3
     , mass = 1
-    , position = { x = 700, y = 300 }
+    , position = { x = 300, y = 300 }
     , velocity = { δx = -0.5, δy = 0.5 }
     , acceleration = { δδx = 0, δδy = 0 }
     }

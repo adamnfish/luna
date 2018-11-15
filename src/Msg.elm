@@ -4,6 +4,7 @@ import Array exposing (Array)
 
 import Model exposing (Model (..), Universe, Body)
 import Physics exposing (advanceUniverse)
+import Utils exposing (repeatFn)
 
 
 type Msg
@@ -34,9 +35,14 @@ update msg model =
         Welcome ->
           ( model, Cmd.none )
         Run universe ->
-          ( Run ( advanceUniverse universe δt )
-          , Cmd.none
-          )
+          let
+            -- use 1 frame (~16ms) as our Time Unit
+            δms = round ( δt / 16 )
+            newUniverse = repeatFn advanceUniverse δms universe
+          in
+            ( Run newUniverse
+            , Cmd.none
+            )
     TogglePhysics ->
       case model of
         Run universe ->

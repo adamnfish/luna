@@ -45,12 +45,14 @@ all =
                 , mass = 1000
                 , position = { x = 0, y = 0 }
                 , velocity = { δx = 0, δy = 0 }
+                , acceleration = { δδx = 0, δδy = 0 }
                 }
               otherBody =
                 { radius = 1
                 , mass = 1000
                 , position = { x = 10, y = 10 }
                 , velocity = { δx = 0, δy = 0 }
+                , acceleration = { δδx = 0, δδy = 0 }
                 }
               acceleration = accelerationDueToGravity body ( Array.fromList [ otherBody ] )
             in
@@ -64,12 +66,14 @@ all =
                 , mass = 1000
                 , position = { x = 0, y = 0 }
                 , velocity = { δx = 0, δy = 0 }
+                , acceleration = { δδx = 0, δδy = 0 }
                 }
               otherBody =
                 { radius = 1
                 , mass = 1000
                 , position = { x = 10, y = 10 }
                 , velocity = { δx = 0, δy = 0 }
+                , acceleration = { δδx = 0, δδy = 0 }
                 }
               acceleration = accelerationDueToGravity body ( Array.fromList [ otherBody ] )
             in
