@@ -173,4 +173,4 @@ scaleDimension window coord =
     minDimension = min window.width window.height
     scale = toFloat minDimension / 1000.0
   in
-    String.fromInt <| round <| ( coord * scale )
+    String.fromFloat <| ( coord * scale )
