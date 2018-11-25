@@ -2,13 +2,14 @@ module Msg exposing (Msg (..), update)
 
 import Array exposing (Array)
 
-import Model exposing (Model (..), Universe, Body)
+import Model exposing (Model, Lifecycle (..), Universe, Body)
 import Physics exposing (advanceUniverse)
 import Utils exposing (repeatFn)
 
 
 type Msg
   = NoOp
+  | ResizeWindow Int Int
   | Genesis ( List Body )
   | Apocalypse
   | Tick Float
@@ -20,18 +21,28 @@ update msg model =
   case msg of
     NoOp ->
       ( model, Cmd.none )
+    ResizeWindow x y ->
+      ( { model | window =
+          { width = x
+          , height = y
+          }
+        }
+      , Cmd.none
+      )
     Genesis bodies ->
-      ( Run
-        { bodies = Array.fromList bodies
-        , time = 0
-        , showPhysics = False
+      ( { model | lifecycle = Run
+          { bodies = Array.fromList bodies
+          , time = 0
+          , showPhysics = False
+          }
         }
       , Cmd.none
       )
     Apocalypse ->
-      ( Welcome, Cmd.none )
+      ( { model | lifecycle = Welcome }
+      , Cmd.none )
     Tick δt ->
-      case model of
+      case model.lifecycle of
         Welcome ->
           ( model, Cmd.none )
         Run universe ->
@@ -40,14 +51,15 @@ update msg model =
             δms = round ( δt / 16 )
             newUniverse = repeatFn advanceUniverse δms universe
           in
-            ( Run newUniverse
+            ( { model | lifecycle = Run newUniverse }
             , Cmd.none
             )
     TogglePhysics ->
-      case model of
+      case model.lifecycle of
         Run universe ->
-          ( Run
-            { universe | showPhysics = not universe.showPhysics }
+          ( { model | lifecycle = Run
+              { universe | showPhysics = not universe.showPhysics }
+            }
           , Cmd.none
           )
         _ ->

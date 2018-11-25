@@ -1,4 +1,4 @@
-module Model exposing (Model (..), Position, Velocity, Acceleration, Body, Universe)
+module Model exposing (Model, Lifecycle (..), Position, Velocity, Acceleration, Body, Universe, Window)
 
 import Array exposing (Array)
 
@@ -32,6 +32,17 @@ type alias Universe =
   , showPhysics : Bool
   }
 
-type Model
+type alias Window =
+  { width : Int
+  , height : Int
+  -- , zoom : Float
+  }
+
+type Lifecycle
   = Welcome
   | Run Universe
+
+type alias Model =
+  { window : Window
+  , lifecycle : Lifecycle
+  }

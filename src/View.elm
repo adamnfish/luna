@@ -10,29 +10,29 @@ import Svg.Attributes exposing
 import Svg.Events
 
 import Examples exposing (slingshot, orbit, eccentricOrbit, solarSystem)
-import Model exposing (Model (..), Body)
+import Model exposing (Model, Lifecycle (..), Body, Window)
 import Msg exposing (Msg (..))
 import Utils exposing (flattenList)
 
 
 view : Model -> Html Msg
 view model =
-  case model of
+  case model.lifecycle of
     Run universe ->
       div
         [ class "universe--container" ]
         [ h1 [] [ text "Luna" ]
-        , div []
+        , div [ class "controls" ]
           [ p
             []
             [ button
               [ onClick Apocalypse
-              , class "cta-button"
+              , class "controls-button"
               ]
               [ text "Quit" ]
             , button
               [ onClick TogglePhysics
-              , class "cta-button"
+              , class "controls-button"
               ]
               [ text
                 (
@@ -45,18 +45,21 @@ view model =
             ]
           ]
         , svg
-          [ viewBox "0 0 1000 1000"
+          [ viewBox
+            ( "0 0 " ++
+              ( String.fromInt model.window.width ) ++
+              ( String.fromInt model.window.height )
+            )
           , Svg.Attributes.class "universe"
           ]
-          (
-            [ rect
-              [ height "1000"
-              , width "1000"
+          ( [ rect
+              [ height "100%"
+              , width "100%"
               , stroke "black"
-              , fill "#666666"
+              , fill "#111111"
               ]
               []
-            ] ++ ( bodyEls universe.showPhysics universe.bodies )
+            ] ++ ( bodyEls model.window universe.showPhysics universe.bodies )
           )
         ]
     Welcome ->
@@ -99,29 +102,29 @@ view model =
           ]
         ]
 
-bodyEls : Bool -> Array Body -> List ( Html Msg )
-bodyEls showPhysics bodies =
-  flattenList <| Array.toList <| Array.map ( bodyEl showPhysics ) bodies
+bodyEls : Window -> Bool -> Array Body -> List ( Html Msg )
+bodyEls window showPhysics bodies =
+  flattenList <| Array.toList <| Array.map ( bodyEl window showPhysics ) bodies
 
-bodyEl : Bool -> Body -> List ( Html Msg )
-bodyEl showPhysics body =
+bodyEl : Window -> Bool -> Body -> List ( Html Msg )
+bodyEl window showPhysics body =
   let
     physics =
       if showPhysics then
         [ line
-          [ x1 ( String.fromInt <| round <| body.position.x )
-          , x2 ( String.fromInt <| round <| body.position.x + ( body.velocity.δx * 50 ) )
-          , y1 ( String.fromInt <| round <| body.position.y )
-          , y2 ( String.fromInt <| round <| body.position.y + ( body.velocity.δy * 50 ) )
+          [ x1 ( scaleDimension window <| body.position.x )
+          , x2 ( scaleDimension window <| body.position.x + ( body.velocity.δx * 50 ) )
+          , y1 ( scaleDimension window <| body.position.y )
+          , y2 ( scaleDimension window <| body.position.y + ( body.velocity.δy * 50 ) )
           , stroke "yellow"
           , strokeWidth "2"
           ]
           []
         , line
-          [ x1 ( String.fromInt <| round <| body.position.x )
-          , x2 ( String.fromInt <| round <| body.position.x + ( body.acceleration.δδx * 1000 ) )
-          , y1 ( String.fromInt <| round <| body.position.y )
-          , y2 ( String.fromInt <| round <| body.position.y + ( body.acceleration.δδy * 1000 ) )
+          [ x1 ( scaleDimension window <| body.position.x )
+          , x2 ( scaleDimension window <| body.position.x + ( body.acceleration.δδx * 1000 ) )
+          , y1 ( scaleDimension window <| body.position.y )
+          , y2 ( scaleDimension window <| body.position.y + ( body.acceleration.δδy * 1000 ) )
           , stroke "red"
           , strokeWidth "2"
           ]
@@ -131,10 +134,18 @@ bodyEl showPhysics body =
         []
   in
     [ circle
-      [ r ( String.fromInt <| round body.radius )
-      , cx ( String.fromInt <| round body.position.x )
-      , cy ( String.fromInt <| round body.position.y )
+      [ r ( scaleDimension window body.radius )
+      , cx ( scaleDimension window body.position.x )
+      , cy ( scaleDimension window body.position.y )
       , fill "#f7f7f7"
       ]
       []
     ] ++ physics
+
+scaleDimension : Window -> Float -> String
+scaleDimension window coord =
+  let
+    minDimension = min window.width window.height
+    scale = toFloat minDimension / 1000
+  in
+    String.fromInt <| round <| ( coord * scale )
