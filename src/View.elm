@@ -6,7 +6,7 @@ import Html.Attributes exposing (src, class, href)
 import Html.Events exposing (onClick)
 import Svg exposing (Svg, svg, rect, circle, line)
 import Svg.Attributes exposing
-  (viewBox, height, width, stroke, strokeWidth, fill, cx, cy, x1, x2, y1, y2, r)
+  (viewBox, height, width, stroke, strokeWidth, fill, cx, cy, x1, x2, y1, y2, x, y, r)
 import Svg.Events
 
 import Examples exposing (slingshot, orbit, eccentricOrbit, solarSystem)
@@ -59,7 +59,9 @@ view model =
               , fill "#111111"
               ]
               []
-            ] ++ ( bodyEls model.window universe.showPhysics universe.bodies )
+            ] ++
+              ( bodyEls model.window universe.showPhysics universe.bodies ) ++
+              ( displayStars model.window model.stars )
           )
         ]
     Welcome ->
@@ -142,10 +144,33 @@ bodyEl window showPhysics body =
       []
     ] ++ physics
 
+displayStars : Window -> List ( Float, Float ) -> List ( Html Msg )
+displayStars window stars =
+  List.map
+    (\(starX, starY) ->
+      rect
+       [ x ( stretchDimension window starX )
+       , y ( stretchDimension window starY )
+       , width "1"
+       , height "1"
+       , fill "#999999"
+       ]
+       []
+    )
+    stars
+
+stretchDimension : Window -> Float -> String
+stretchDimension window coord =
+  let
+    maxDimension = max window.width window.height
+    scale = ( toFloat maxDimension ) / 1000.0
+  in
+    String.fromInt <| round <| ( coord * scale )
+
 scaleDimension : Window -> Float -> String
 scaleDimension window coord =
   let
     minDimension = min window.width window.height
-    scale = toFloat minDimension / 1000
+    scale = toFloat minDimension / 1000.0
   in
     String.fromInt <| round <| ( coord * scale )

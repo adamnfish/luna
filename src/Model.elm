@@ -45,4 +45,5 @@ type Lifecycle
 type alias Model =
   { window : Window
   , lifecycle : Lifecycle
+  , stars : List ( Float, Float )
   }

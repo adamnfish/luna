@@ -10,6 +10,7 @@ import Utils exposing (repeatFn)
 type Msg
   = NoOp
   | ResizeWindow Int Int
+  | MakeStars ( List ( Float, Float ) )
   | Genesis ( List Body )
   | Apocalypse
   | Tick Float
@@ -27,6 +28,10 @@ update msg model =
           , height = y
           }
         }
+      , Cmd.none
+      )
+    MakeStars stars ->
+      ( { model | stars = stars }
       , Cmd.none
       )
     Genesis bodies ->

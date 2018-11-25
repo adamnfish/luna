@@ -4,6 +4,7 @@ import Array exposing (Array)
 import Browser
 import Browser.Dom exposing (getViewport)
 import Browser.Events
+import Random
 import Task
 
 import Examples exposing (orbit, slingshot)
@@ -22,12 +23,22 @@ updateWindowDimensions res =
     Err msg ->
       NoOp
 
+starField : Random.Generator ( List ( Float, Float ) )
+starField =
+  Random.list 150
+    ( Random.pair ( Random.float 0 1000 ) ( Random.float 0 1000 )
+    )
+
 init : ( Model, Cmd Msg )
 init =
   ( { lifecycle = Welcome
     , window = { width = 1000, height = 1000 }
+    , stars = []
     }
-  , Task.attempt updateWindowDimensions Browser.Dom.getViewport
+  , Cmd.batch
+    [ Task.attempt updateWindowDimensions Browser.Dom.getViewport
+    , Random.generate MakeStars starField
+    ]
   )
 
 -- SUBS
