@@ -35,7 +35,7 @@ type alias Universe =
 type alias Window =
   { width : Int
   , height : Int
-  -- , zoom : Float
+  , zoom : Float
   }
 
 type Lifecycle

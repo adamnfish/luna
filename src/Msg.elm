@@ -15,6 +15,8 @@ type Msg
   | Apocalypse
   | Tick Float
   | TogglePhysics
+  | ZoomIn
+  | ZoomOut
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -26,6 +28,7 @@ update msg model =
       ( { model | window =
           { width = x
           , height = y
+          , zoom = model.window.zoom
           }
         }
       , Cmd.none
@@ -69,3 +72,21 @@ update msg model =
           )
         _ ->
           ( model, Cmd.none )
+    ZoomIn ->
+      ( { model | window =
+          { zoom = model.window.zoom + 0.1
+          , width = model.window.width
+          , height = model.window.height
+          }
+        }
+      , Cmd.none
+      )
+    ZoomOut ->
+      ( { model | window =
+          { zoom = model.window.zoom - 0.1
+          , width = model.window.width
+          , height = model.window.height
+          }
+        }
+      , Cmd.none
+      )

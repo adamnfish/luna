@@ -42,6 +42,18 @@ view model =
                     "Show physics"
                 )
               ]
+            , button
+              [ onClick ZoomOut
+              , class "controls-button"
+              ]
+              [ text "Zoom out"
+              ]
+            , button
+              [ onClick ZoomIn
+              , class "controls-button"
+              ]
+              [ text "Zoom in"
+              ]
             ]
           ]
         , svg
@@ -114,19 +126,19 @@ bodyEl window showPhysics body =
     physics =
       if showPhysics then
         [ line
-          [ x1 ( scaleDimension window <| body.position.x )
-          , x2 ( scaleDimension window <| body.position.x + ( body.velocity.δx * 50 ) )
-          , y1 ( scaleDimension window <| body.position.y )
-          , y2 ( scaleDimension window <| body.position.y + ( body.velocity.δy * 50 ) )
+          [ x1 ( scaleDimension window XAxis <| body.position.x )
+          , x2 ( scaleDimension window XAxis <| body.position.x + ( body.velocity.δx * 50 ) )
+          , y1 ( scaleDimension window YAxis <| body.position.y )
+          , y2 ( scaleDimension window YAxis <| body.position.y + ( body.velocity.δy * 50 ) )
           , stroke "yellow"
           , strokeWidth "2"
           ]
           []
         , line
-          [ x1 ( scaleDimension window <| body.position.x )
-          , x2 ( scaleDimension window <| body.position.x + ( body.acceleration.δδx * 1000 ) )
-          , y1 ( scaleDimension window <| body.position.y )
-          , y2 ( scaleDimension window <| body.position.y + ( body.acceleration.δδy * 1000 ) )
+          [ x1 ( scaleDimension window XAxis <| body.position.x )
+          , x2 ( scaleDimension window XAxis <| body.position.x + ( body.acceleration.δδx * 1000 ) )
+          , y1 ( scaleDimension window YAxis <| body.position.y )
+          , y2 ( scaleDimension window YAxis <| body.position.y + ( body.acceleration.δδy * 1000 ) )
           , stroke "red"
           , strokeWidth "2"
           ]
@@ -136,9 +148,9 @@ bodyEl window showPhysics body =
         []
   in
     [ circle
-      [ r ( scaleDimension window body.radius )
-      , cx ( scaleDimension window body.position.x )
-      , cy ( scaleDimension window body.position.y )
+      [ r ( scaleDimension window Radius body.radius )
+      , cx ( scaleDimension window XAxis body.position.x )
+      , cy ( scaleDimension window YAxis body.position.y )
       , fill "#f7f7f7"
       ]
       []
@@ -159,6 +171,11 @@ displayStars window stars =
     )
     stars
 
+type Dimension
+  = XAxis
+  | YAxis
+  | Radius
+
 stretchDimension : Window -> Float -> String
 stretchDimension window coord =
   let
@@ -167,10 +184,16 @@ stretchDimension window coord =
   in
     String.fromInt <| round <| ( coord * scale )
 
-scaleDimension : Window -> Float -> String
-scaleDimension window coord =
+scaleDimension : Window -> Dimension -> Float -> String
+scaleDimension window dimension coord =
   let
     minDimension = min window.width window.height
     scale = toFloat minDimension / 1000.0
+    zoom =
+      case dimension of
+          Radius ->
+            1.0
+          _ ->
+            window.zoom
   in
-    String.fromFloat <| ( coord * scale )
+    String.fromFloat <| ( coord * scale * zoom )
