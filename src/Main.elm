@@ -32,7 +32,13 @@ starField =
 init : ( Model, Cmd Msg )
 init =
   ( { lifecycle = Welcome
-    , window = { width = 1000, height = 1000, zoom = 1.0 }
+    , window =
+      { width = 1000
+      , height = 1000
+      , x = 0
+      , y = 0
+      , zoom = 1.0
+      }
     , stars = []
     }
   , Cmd.batch

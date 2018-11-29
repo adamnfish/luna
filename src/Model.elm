@@ -35,6 +35,8 @@ type alias Universe =
 type alias Window =
   { width : Int
   , height : Int
+  , x : Int
+  , y : Int
   , zoom : Float
   }
 

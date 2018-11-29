@@ -2,7 +2,7 @@ module Msg exposing (Msg (..), update)
 
 import Array exposing (Array)
 
-import Model exposing (Model, Lifecycle (..), Universe, Body)
+import Model exposing (Model, Lifecycle (..), Universe, Body, Window)
 import Physics exposing (advanceUniverse)
 import Utils exposing (repeatFn)
 
@@ -17,6 +17,8 @@ type Msg
   | TogglePhysics
   | ZoomIn
   | ZoomOut
+  | PanX Int
+  | PanY Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -24,13 +26,12 @@ update msg model =
   case msg of
     NoOp ->
       ( model, Cmd.none )
-    ResizeWindow x y ->
-      ( { model | window =
-          { width = x
-          , height = y
-          , zoom = model.window.zoom
-          }
-        }
+    ResizeWindow w h ->
+      ( updateWindow model
+        ( \window -> { window | width = w
+                              , height = h
+                     }
+        )
       , Cmd.none
       )
     MakeStars stars ->
@@ -39,10 +40,17 @@ update msg model =
       )
     Genesis bodies ->
       ( { model | lifecycle = Run
-          { bodies = Array.fromList bodies
-          , time = 0
-          , showPhysics = False
-          }
+                  { bodies = Array.fromList bodies
+                  , time = 0
+                  , showPhysics = False
+                  }
+                , window =
+                  { x = 0
+                  , y = 0
+                  , zoom = 1.0
+                  , width = model.window.width
+                  , height = model.window.height
+                  }
         }
       , Cmd.none
       )
@@ -73,20 +81,26 @@ update msg model =
         _ ->
           ( model, Cmd.none )
     ZoomIn ->
-      ( { model | window =
-          { zoom = model.window.zoom + 0.1
-          , width = model.window.width
-          , height = model.window.height
-          }
-        }
+      ( updateWindow model
+        ( \window -> { window | zoom = window.zoom + 0.1 } )
       , Cmd.none
       )
     ZoomOut ->
-      ( { model | window =
-          { zoom = model.window.zoom - 0.1
-          , width = model.window.width
-          , height = model.window.height
-          }
-        }
+      ( updateWindow model
+        ( \window -> { window | zoom = window.zoom - 0.1 } )
       , Cmd.none
       )
+    PanX δx ->
+      ( updateWindow model
+        ( \window -> { window | x = window.x + δx } )
+      , Cmd.none
+      )
+    PanY δy ->
+      ( updateWindow model
+        ( \window -> { window | y = window.y + δy } )
+      , Cmd.none
+      )
+
+updateWindow : Model -> ( Window -> Window ) -> Model
+updateWindow model f =
+  { model | window = f model.window }

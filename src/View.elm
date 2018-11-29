@@ -54,12 +54,37 @@ view model =
               ]
               [ text "Zoom in"
               ]
+            , button
+              [ onClick <| PanX -10
+              , class "controls-button"
+              ]
+              [ text "L"
+              ]
+            , button
+              [ onClick <| PanX 10
+              , class "controls-button"
+              ]
+              [ text "R"
+              ]
+            , button
+              [ onClick <| PanY -10
+              , class "controls-button"
+              ]
+              [ text "U"
+              ]
+            , button
+              [ onClick <| PanY 10
+              , class "controls-button"
+              ]
+              [ text "D"
+              ]
             ]
           ]
         , svg
           [ viewBox
             ( "0 0 " ++
               ( String.fromInt model.window.width ) ++
+              " " ++
               ( String.fromInt model.window.height )
             )
           , Svg.Attributes.class "universe"
@@ -189,11 +214,13 @@ scaleDimension window dimension coord =
   let
     minDimension = min window.width window.height
     scale = toFloat minDimension / 1000.0
-    zoom =
+    (zoom, pan) =
       case dimension of
           Radius ->
-            1.0
-          _ ->
-            window.zoom
+            (1.0, 0)
+          XAxis ->
+            (window.zoom, window.x)
+          YAxis ->
+            (window.zoom, window.y)
   in
-    String.fromFloat <| ( coord * scale * zoom )
+    String.fromFloat <| ( ( coord * scale * zoom ) - ( toFloat pan ) )
