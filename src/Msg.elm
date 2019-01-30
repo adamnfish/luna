@@ -81,10 +81,18 @@ update msg model =
         _ ->
           ( model, Cmd.none )
     ZoomIn ->
-      ( updateWindow model
-        ( \window -> { window | zoom = window.zoom + 0.1 } )
-      , Cmd.none
-      )
+      let
+        xPan = model.window.width * ( round <| 0.1 / 2 )
+        yPan = model.window.height * ( round <| 0.1 / 2 )
+      in
+        ( updateWindow model
+          ( \window -> { window | zoom = window.zoom + 0.1
+                                , x = window.x + xPan
+                                , y = window.y + yPan
+                       }
+          )
+        , Cmd.none
+        )
     ZoomOut ->
       ( updateWindow model
         ( \window -> { window | zoom = window.zoom - 0.1 } )
