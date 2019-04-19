@@ -9,7 +9,7 @@ import Svg.Attributes exposing
   (viewBox, height, width, stroke, strokeWidth, fill, cx, cy, x1, x2, y1, y2, r)
 import Svg.Events
 
-import Examples exposing (slingshot, orbit, eccentricOrbit, solarSystem)
+import Examples exposing (slingshot, orbit, eccentricOrbit, solarSystem, solarSystem2)
 import Model exposing (Model (..), Body)
 import Msg exposing (Msg (..))
 import Utils exposing (flattenList)
@@ -85,10 +85,17 @@ view model =
             ]
         , p []
             [ button
-              [ onClick ( Genesis solarSystem ) 
+              [ onClick ( Genesis solarSystem )
               , class "cta-button"
               ]
               [ text "Solar system" ]
+            ]
+        , p []
+            [ button
+              [ onClick ( Genesis solarSystem2 )
+              , class "cta-button"
+              ]
+              [ text "Solar system 2" ]
             ]
         , p
           [ class "info-box" ]
@@ -132,8 +139,8 @@ bodyEl showPhysics body =
   in
     [ circle
       [ r ( String.fromInt <| round body.radius )
-      , cx ( String.fromInt <| round body.position.x )
-      , cy ( String.fromInt <| round body.position.y )
+      , cx ( String.fromInt <| round ( body.position.x ) )
+      , cy ( String.fromInt <| round ( body.position.y ) )
       , fill "#f7f7f7"
       ]
       []
