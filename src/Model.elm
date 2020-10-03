@@ -1,49 +1,57 @@
-module Model exposing (Model, Lifecycle (..), Position, Velocity, Acceleration, Body, Universe, Window)
+module Model exposing (Acceleration, Body, Lifecycle(..), Model, Position, Universe, Velocity, Window)
 
 import Array exposing (Array)
 
 
 type alias Position =
-  { x : Float
-  , y : Float
-  }
+    { x : Float
+    , y : Float
+    }
+
 
 type alias Velocity =
-  { δx : Float
-  , δy : Float
-  }
+    { δx : Float
+    , δy : Float
+    }
+
 
 type alias Acceleration =
-  { δδx : Float
-  , δδy : Float
-  }
+    { δδx : Float
+    , δδy : Float
+    }
+
 
 type alias Body =
-  { radius : Float
-  , mass : Float
-  , position : Position
-  , velocity : Velocity
-  , acceleration : Acceleration
-  }
+    { radius : Float
+    , mass : Float
+    , position : Position
+    , velocity : Velocity
+    , acceleration : Acceleration
+    }
+
 
 type alias Universe =
-  { bodies : Array Body
-  , time : Float
-  , showPhysics : Bool
-  }
+    { bodies : Array Body
+    , time : Float
+    , showPhysics : Bool
+    }
+
 
 type alias Window =
-  { width : Int
-  , height : Int
-  -- , zoom : Float
-  }
+    { width : Int
+    , height : Int
+
+    -- , zoom : Float
+    }
+
 
 type Lifecycle
-  = Welcome
-  | Run Universe
+    = Welcome
+    | Run Universe
+
 
 type alias Model =
-  { window : Window
-  , lifecycle : Lifecycle
-  , stars : List ( Float, Float )
-  }
+    { window : Window
+    , lifecycle : Lifecycle
+    , stars : List ( Float, Float )
+    }
